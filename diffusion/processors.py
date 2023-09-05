@@ -1,9 +1,13 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
-
+import yaml
 from PIL import Image
 
+from diffusers import AutoPipelineForImage2Image
+import torch
+
+from diffusion import MAIN_FOLDER, REFERENCE_PATH
 
 
 class BaseProcessor(ABC):
@@ -25,8 +29,66 @@ class TransferProcessor(BaseProcessor):
 
 
 class ImagineProcessor(BaseProcessor):
-    def __init__(self): ...
+    def __init__(self):
+        self.model = None
+        self.config = None
 
-    def init_model(self, config_file: Path) -> Any: ...
+    def init_model(self, config_path: Path) -> Any:
+        self.config = self.load_config(config_path)
 
-    def process_image(self, input_data: tuple[Image, str]) -> Image: ...
+        pipe = AutoPipelineForImage2Image.from_pretrained(
+            self.config.get('model'), torch_dtype=torch.float16
+        )
+        pipe.enable_model_cpu_offload()
+
+        # return pipe
+        self.model = pipe
+
+    def process_image(self, input_data: tuple[Image, str]) -> Image:
+        base_prompt = self.config.get('base_prompt'),
+        negative_prompt = self.config.get('negative_prompt')
+
+        width, height = self.config.get('dimensions')
+
+        img, additional_prompt = input_data
+        img = img.resize((width, height))
+
+        prompt = f"{base_prompt} {additional_prompt}"
+        processed_image = self.model(
+            prompt=prompt, negative_prompt=negative_prompt,
+            image=img, strength=0.1, height=768, width=768
+        ).images[0]
+        return processed_image
+
+    @staticmethod
+    def load_config(config_path: Path) -> dict:
+        with config_path.open("r") as stream:
+            try:
+                return yaml.safe_load(stream)
+            except yaml.YAMLError as exc:
+                return dict()
+
+
+if __name__ == "__main__":
+    processor = ImagineProcessor()
+
+    processor.init_model(MAIN_FOLDER / 'configs/imagine_config.yaml')
+    reference_img = Image.open(REFERENCE_PATH)
+    input_data = (reference_img, '')
+    img = processor.process_image(input_data)
+
+    images = [reference_img, img]
+    widths, heights = zip(*(i.size for i in images))
+
+    total_width = sum(widths)
+    max_height = max(heights)
+
+    new_im = Image.new('RGB', (total_width, max_height))
+    x_offset = 0
+    for im in images:
+        new_im.paste(im, (x_offset, 0))
+        x_offset += im.size[0]
+
+    new_im.show()
+
+    # img.show()

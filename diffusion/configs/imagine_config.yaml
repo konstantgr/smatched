@@ -1,0 +1,5 @@
+model: kandinsky-community/kandinsky-2-2-decoder
+strength: 0.1
+base_prompt: "natural woman makeup"
+negative_prompt: "changing eyes color"
+dimensions: [768, 512]

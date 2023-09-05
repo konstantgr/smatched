@@ -7,7 +7,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 from web import MAIN_FOLDER
 
 
-def display_images(source_image: Optional[Image], reference_image: Optional[Image]) -> None:
+def display_images(source_image: Optional[type(Image)], reference_image: Optional[type(Image)]) -> None:
     cols = st.columns(2)
     subheaders_mapping = {
         0: "Source image",

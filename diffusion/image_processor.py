@@ -29,12 +29,14 @@ def init_style_transition_model():
     pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(
         model_id, torch_dtype=torch.float32, safety_checker=None
     )
-    # pipe.to("cuda")
+    pipe.to("cuda")
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
     return pipe
 
 
 if __name__ == '__main__':
+    model = init_style_transition_model()
+    process_image(model).show()
     print("dummy")
     # processor = TransferProcessor()
     # processor.init_model(...)
