@@ -71,7 +71,7 @@ def run_server():
 
         if generate_button:
             with st.spinner('Wait for it...'):
-                generated_image = run_imagine_processor(image_source, text_input)
+                generated_image = run_imagine_processor(Image.open(image_source), text_input)
             st.image(generated_image, use_column_width=True)
 
 
