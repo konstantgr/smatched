@@ -1,43 +1,70 @@
-import io
+from typing import Optional
 
 import streamlit as st
-from PIL import ImageEnhance, Image
+from PIL import Image
+from streamlit.runtime.uploaded_file_manager import UploadedFile
+
+from web import MAIN_FOLDER
 
 
-# from diffusion.image_processor import process_image
+def display_images(source_image: Optional[Image], reference_image: Optional[Image]) -> None:
+    cols = st.columns(2)
+    subheaders_mapping = {
+        0: "Source image",
+        1: "Reference image"
+    }
+
+    for i, image in enumerate([source_image, reference_image]):
+        if image is not None:
+            cols[i].subheader(subheaders_mapping[i])
+            cols[i].image(image, use_column_width=True)
 
 
-def process_image(img_bytes: bytes):
-    img = Image.open(io.BytesIO(img_bytes))
-    filtered_image = ImageEnhance.Color(img)
-    filtered_image.enhance(0)
+def get_default_reference_image() -> Image:
+    img = Image.open(MAIN_FOLDER / "images/reference_image.png")
     return img
 
 
-def image_form():
-    col1, col2 = st.columns(2)
-    image_reference, image_source = None, None
+def run_server():
+    st.title("Smatched!")
+
+    st.header("Image Upload and Text Input")
+
+    images_source, image_reference = None, None
+    col1, col2, col3 = st.columns(3)
+
     with col1:
-        uploaded_file = st.file_uploader("Choose a reference image")
-        if uploaded_file is not None:
-            image_reference = uploaded_file.getvalue()
-            st.image(image_reference)
+        text_input = st.text_input("Enter some text:")
 
     with col2:
-        uploaded_file = st.file_uploader("Choose a sample image")
-        if uploaded_file is not None:
-            image_source = uploaded_file.getvalue()
-            st.image(image_source)
+        images_source = st.file_uploader(
+            "Upload source image",
+            type=["jpg", "png", "jpeg"],
+        )
 
-    generate_button = st.button("Generate", type="primary")
-    if generate_button:
-        with col2:
-            st.image(process_image(image_source))
+    with col3:
+        image_reference = st.file_uploader(
+            "Upload reference image",
+            type=["jpg", "png", "jpeg"]
+        )
 
+    st.divider()
 
-def run_server():
-    st.header("Smatched!")
-    image_form()
+    if image_reference is None:
+        image_reference = get_default_reference_image()
+
+    if images_source or image_reference:
+        uploaded_images = []
+
+        if images_source:
+            uploaded_images.append(Image.open(images_source))
+
+        if isinstance(image_reference, UploadedFile):
+            uploaded_images.append(Image.open(image_reference))
+
+        with st.info("Uploaded Images:"):
+            display_images(images_source, image_reference)
+        st.divider()
 
 
 if __name__ == "__main__":
