@@ -5,6 +5,7 @@ from PIL import Image
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from web import MAIN_FOLDER
+from web.run_processor import run_imagine_processor
 
 
 def display_images(source_image: Optional[type(Image)], reference_image: Optional[type(Image)]) -> None:
@@ -30,14 +31,14 @@ def run_server():
 
     st.header("Image Upload and Text Input")
 
-    images_source, image_reference = None, None
+    image_source, image_reference = None, None
     col1, col2, col3 = st.columns(3)
 
     with col1:
         text_input = st.text_input("Enter some text:")
 
     with col2:
-        images_source = st.file_uploader(
+        image_source = st.file_uploader(
             "Upload source image",
             type=["jpg", "png", "jpeg"],
         )
@@ -53,18 +54,25 @@ def run_server():
     if image_reference is None:
         image_reference = get_default_reference_image()
 
-    if images_source or image_reference:
+    if image_source or image_reference:
         uploaded_images = []
 
-        if images_source:
-            uploaded_images.append(Image.open(images_source))
+        if image_source:
+            uploaded_images.append(Image.open(image_source))
 
         if isinstance(image_reference, UploadedFile):
             uploaded_images.append(Image.open(image_reference))
 
         with st.info("Uploaded Images:"):
-            display_images(images_source, image_reference)
+            display_images(image_source, image_reference)
+
+        generate_button = st.button("Generate make-up")
         st.divider()
+
+        if generate_button:
+            with st.spinner('Wait for it...'):
+                generated_image = run_imagine_processor(image_source, text_input)
+            st.image(generated_image, use_column_width=True)
 
 
 if __name__ == "__main__":
