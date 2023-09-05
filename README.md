@@ -8,18 +8,18 @@ To run this application on your local machine, follow these steps:
 
 1. **Clone the Repository**: Start by cloning this repository to your local machine using Git.
 ```bash
- git clone <repository_url>
+ git clone https://github.com/konstantgr/smatched.git
 ```
 2. **Install Dependencies**: Navigate to the project directory and use Poetry to install the project dependencies.
 ```bash
-cd makeup-transfer-project
+cd smatched
 poetry install
 ```
 
 3. **Run the Streamlit App**: Once the dependencies are installed, you can run the Streamlit web application.
 
 ```bash
-streamlit run web/app.py
+poetry run streamlit run web/app.py
 ```
 
 ## Access the Web App:
