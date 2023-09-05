@@ -1,7 +1,9 @@
-from PIL import Image, ImageOps
 import requests
 import torch
+from PIL import Image, ImageOps
 from diffusers import StableDiffusionInstructPix2PixPipeline, EulerAncestralDiscreteScheduler
+
+from diffusion.processors import TransferProcessor
 
 
 def download_image(url):
@@ -33,6 +35,9 @@ def init_style_transition_model():
 
 
 if __name__ == '__main__':
-    model = init_style_transition_model()
-    image = process_image(model)
-    image.show()
+    print("dummy")
+    # processor = TransferProcessor()
+    # processor.init_model(...)
+    # input_data = None
+    # img = processor.process_image(input_data)
+    # img.show()
