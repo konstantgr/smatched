@@ -77,7 +77,7 @@ if __name__ == "__main__":
     input_data = (reference_img, '')
     img = processor.process_image(input_data)
 
-    images = [reference_img, img]
+    images = [reference_img.resize((768, 768)), img]
     widths, heights = zip(*(i.size for i in images))
 
     total_width = sum(widths)

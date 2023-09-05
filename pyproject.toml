@@ -2,7 +2,10 @@
 name = "hackathon-makeup"
 version = "0.1.0"
 description = ""
-authors = ["konstantgr <konstantin.grotov@gmail.com>"]
+authors = [
+    "Konstantin Grotov <konstantin.grotov@gmail.com>",
+    "Artem Ponomarenko <slfdstrctd@yandex.ru>"
+]
 readme = "README.md"
 
 packages = [
