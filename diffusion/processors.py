@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
+
+import torch
 import yaml
 from PIL import Image
-
 from diffusers import AutoPipelineForImage2Image
-import torch
 
 from diffusion import MAIN_FOLDER, REFERENCE_PATH
 
@@ -18,6 +18,15 @@ class BaseProcessor(ABC):
     @abstractmethod
     def process_image(self, input_data: tuple[Image, Image] | tuple[Image, str]) -> Image:
         raise NotImplementedError()
+
+
+class DummyImagineProcessor(BaseProcessor):
+    def init_model(self) -> None:
+        print("Initializing dummy model")
+
+    def process_image(self, input_data: tuple[Image, str]) -> Image:
+        img, s = input_data
+        return img
 
 
 class TransferProcessor(BaseProcessor):
@@ -33,7 +42,7 @@ class ImagineProcessor(BaseProcessor):
         self.model = None
         self.config = None
 
-    def init_model(self, config_path: Path) -> Any:
+    def init_model(self, config_path: Path = MAIN_FOLDER / 'configs/imagine_config.yaml') -> Any:
         self.config = self.load_config(config_path)
 
         pipe = AutoPipelineForImage2Image.from_pretrained(
@@ -72,7 +81,7 @@ class ImagineProcessor(BaseProcessor):
 if __name__ == "__main__":
     processor = ImagineProcessor()
 
-    processor.init_model(MAIN_FOLDER / 'configs/imagine_config.yaml')
+    processor.init_model()
     reference_img = Image.open(REFERENCE_PATH)
     input_data = (reference_img, '')
     img = processor.process_image(input_data)
@@ -90,5 +99,3 @@ if __name__ == "__main__":
         x_offset += im.size[0]
 
     new_im.show()
-
-    # img.show()
