@@ -1,5 +1,0 @@
-model: kandinsky-community/kandinsky-2-2-decoder
-strength: 0.1
-base_prompt: "woman makeup"
-negative_prompt: "eyes color"
-dimensions: [512, 512]

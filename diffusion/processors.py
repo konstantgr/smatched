@@ -44,8 +44,13 @@ class ImagineProcessor(BaseProcessor):
         self.model = None
         self.config = None
 
-    def init_model(self, config_path: Path = MAIN_FOLDER / 'configs/kandinsky_imagine_config.yaml') -> Any:
-        self.config = self.load_config(config_path)
+    def init_model(
+            self, config_path:
+            Path = MAIN_FOLDER / 'configs/imagine_config.yaml',
+            model_name: str = 'sd15'
+    ) -> Any:
+        # 'configs/imagine_config.yaml'
+        self.config = self.load_config(config_path).get(model_name)
 
         pipe = AutoPipelineForImage2Image.from_pretrained(
             self.config.get('model'), torch_dtype=torch.float16
@@ -84,17 +89,16 @@ class ImagineProcessor(BaseProcessor):
 
     def process_image(self, input_data: tuple[Image, str]) -> Image:
         base_prompt = self.config.get('base_prompt'),
-        negative_prompt = self.config.get('negative_prompt')
 
         width, height = self.config.get('dimensions')
 
-        img, additional_prompt = input_data
-        img = img.resize((width, height))
+        input_img, additional_prompt = input_data
+        input_img = input_img.resize((width, height))
 
         prompt = f"{base_prompt} {additional_prompt}"
         processed_image = self.model(
-            prompt=prompt, negative_prompt=negative_prompt,
-            image=img, strength=0.1, height=512, width=512
+            prompt=prompt, image=input_img,
+            **self.config.get("hyperparameters")
         ).images[0]
         return processed_image
 
