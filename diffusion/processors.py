@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import torch
+import cv2
 import yaml
 from PIL import Image
 from diffusers import AutoPipelineForImage2Image
@@ -42,7 +44,7 @@ class ImagineProcessor(BaseProcessor):
         self.model = None
         self.config = None
 
-    def init_model(self, config_path: Path = MAIN_FOLDER / 'configs/imagine_config.yaml') -> Any:
+    def init_model(self, config_path: Path = MAIN_FOLDER / 'configs/kandinsky_imagine_config.yaml') -> Any:
         self.config = self.load_config(config_path)
 
         pipe = AutoPipelineForImage2Image.from_pretrained(
@@ -52,6 +54,33 @@ class ImagineProcessor(BaseProcessor):
 
         # return pipe
         self.model = pipe
+
+    @staticmethod
+    def preprocess_image(input_img: Image) -> Image:
+        image_np = cv2.cvtColor(np.array(input_img), cv2.COLOR_RGB2BGR)
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        faces = face_cascade.detectMultiScale(image_np, scaleFactor=1.5, minNeighbors=5, minSize=(30, 30))
+
+        if len(faces) == 0:
+            raise Exception("No faces detected in the image.")
+        else:
+            x, y, w, h = faces[0]
+            padding = 100
+            # Add padding around the detected face
+            x -= padding
+            y -= padding
+            w += 2 * padding
+            h += 2 * padding
+            x = max(0, x)
+            y = max(0, y)
+            w = min(image_np.shape[1] - x, w)
+            h = min(image_np.shape[0] - y, h)
+            cropped_face = image_np[y:y + h, x:x + w]
+            resized_face = cv2.resize(cropped_face, (512, 512))
+            pil_resized_face = Image.fromarray(cv2.cvtColor(resized_face, cv2.COLOR_BGR2RGB))
+
+            # pil_resized_face.show()
+            return pil_resized_face
 
     def process_image(self, input_data: tuple[Image, str]) -> Image:
         base_prompt = self.config.get('base_prompt'),
@@ -65,7 +94,7 @@ class ImagineProcessor(BaseProcessor):
         prompt = f"{base_prompt} {additional_prompt}"
         processed_image = self.model(
             prompt=prompt, negative_prompt=negative_prompt,
-            image=img, strength=0.1, height=768, width=768
+            image=img, strength=0.1, height=512, width=512
         ).images[0]
         return processed_image
 
@@ -79,14 +108,20 @@ class ImagineProcessor(BaseProcessor):
 
 
 if __name__ == "__main__":
+    # print("CUDA", torch.cuda.is_available())
+    # if not torch.cuda.is_available():
+    #     exit(0)
     processor = ImagineProcessor()
 
     processor.init_model()
     reference_img = Image.open(REFERENCE_PATH)
-    input_data = (reference_img, '')
+
+    img_cropped = processor.preprocess_image(reference_img)
+
+    input_data = (img_cropped, '')
     img = processor.process_image(input_data)
 
-    images = [reference_img.resize((768, 768)), img]
+    images = [img_cropped, img]
     widths, heights = zip(*(i.size for i in images))
 
     total_width = sum(widths)

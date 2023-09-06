@@ -1,11 +1,13 @@
 from PIL import Image
 
-from diffusion.processors import DummyImagineProcessor
+from diffusion.processors import DummyImagineProcessor, ImagineProcessor
 
 
-def run_imagine_processor(reference_img: Image, prompt: str) -> Image:
-    processor = DummyImagineProcessor()
+def run_imagine_processor(src_img: Image, additional_prompt: str) -> Image:
+    processor = ImagineProcessor()
     processor.init_model()
-    input_data = (reference_img, prompt)
+
+    cropped_img = processor.preprocess_image(src_img)
+    input_data = (cropped_img, additional_prompt)
     img = processor.process_image(input_data)
     return img
