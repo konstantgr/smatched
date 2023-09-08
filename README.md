@@ -3,6 +3,9 @@
 This project is a web application that allows you to transfer make-up from one photo to another using the Stable
 Diffusion. It is built using Streamlit, a Python library for creating web applications with minimal effort.
 
+
+<div align="center"><img src="https://s11.gifyu.com/images/S4SS6.gif" width="500" /></div>
+
 ## Getting Started
 
 To run this application on your local machine, follow these steps:
