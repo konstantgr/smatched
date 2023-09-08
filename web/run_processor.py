@@ -1,6 +1,7 @@
 from PIL import Image
 
-from diffusion.processors import DummyImagineProcessor, ImagineProcessor
+from diffusion.processors import ImagineProcessor
+from diffusion.imagine_processor import DummyImagineProcessor
 
 
 def run_imagine_processor(src_img: Image, additional_prompt: str, dev: bool = False) -> Image:

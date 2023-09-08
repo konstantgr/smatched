@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 
-def extend_face_bbox(img: np.ndarray, bbox: tuple[float, float, float, float]):
+def extend_face_bbox(img: np.ndarray, bbox: tuple[int, int, int, int]):
     x, y, w, h = bbox
     padding = 100
     # Add padding around the detected face
@@ -11,8 +11,8 @@ def extend_face_bbox(img: np.ndarray, bbox: tuple[float, float, float, float]):
     y -= padding
     w += 2 * padding
     h += 2 * padding
-    x = max(.0, x)
-    y = max(.0, y)
+    x = max(0, x)
+    y = max(0, y)
     w = min(img.shape[1] - x, w)
     h = min(img.shape[0] - y, h)
     cropped_face = img[y:y + h, x:x + w]
