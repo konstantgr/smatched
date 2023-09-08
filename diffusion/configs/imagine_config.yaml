@@ -8,6 +8,7 @@ kandinsky:
     guidance_scale: 7.5 # >1, default=7.5
     negative_prompt: ""
     strength: 0.1 # [0,1], default=50
+
 sd15:
   model: runwayml/stable-diffusion-v1-5
   base_prompt: woman makeup
