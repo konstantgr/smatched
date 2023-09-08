@@ -63,6 +63,7 @@ class ImagineProcessor(BaseProcessor):
     @staticmethod
     def preprocess_image(input_img: Image) -> Image:
         image_np = cv2.cvtColor(np.array(input_img), cv2.COLOR_RGB2BGR)
+        print(type(image_np))
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         faces = face_cascade.detectMultiScale(image_np, scaleFactor=1.5, minNeighbors=5, minSize=(30, 30))
 
