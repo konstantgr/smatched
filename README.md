@@ -37,6 +37,6 @@ You can now use the web application to transfer makeup from one photo to another
 1. Upload the source image containing the makeup you want to transfer.
 2. Upload the target image where you want to apply the makeup.
 3. Adjust any relevant parameters or settings (if available).
-4. Click the "Transfer Makeup" button.
+4. Click the "Generate makeup" button.
 5. The result, with makeup transferred to the target image, will be displayed on the screen.
 6. You can download the resulting image for your use.
