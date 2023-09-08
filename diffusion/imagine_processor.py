@@ -30,10 +30,9 @@ class ImagineProcessor(BaseProcessor):
     def init_model(
             self, config_path:
             Path = MAIN_FOLDER / 'configs/imagine_config.yaml',
-            model_name: str = 'sd15'
+            model_name: str = 'kandinsky'
     ) -> Any:
         self.config = self.load_config(config_path).get(model_name)
-
         pipe = AutoPipelineForImage2Image.from_pretrained(
             self.config.get('model'), torch_dtype=torch.float16
         )

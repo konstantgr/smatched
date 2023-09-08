@@ -1733,6 +1733,25 @@ watchdog = {version = ">=2.1.5", markers = "platform_system != \"Darwin\""}
 snowflake = ["snowflake-snowpark-python"]
 
 [[package]]
+name = "streamlit-image-comparison"
+version = "0.0.4"
+description = "A Streamlit Component to compare images with a slider in Streamlit apps."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "streamlit-image-comparison-0.0.4.tar.gz", hash = "sha256:3932875978151eb89b65a2da5ca293fc15da12a322632214d96ce0146d9154b4"},
+    {file = "streamlit_image_comparison-0.0.4-py3-none-any.whl", hash = "sha256:84bb4bc8c9e66fd7ab28fdcd76cf87f0f27941e7288160fb9832c9322bd1f085"},
+]
+
+[package.dependencies]
+numpy = "*"
+Pillow = "*"
+streamlit = "*"
+
+[package.extras]
+dev = ["black (==21.7b0)", "flake8 (==3.9.2)", "isort (==5.9.2)", "jupyterlab (==3.0.14)"]
+
+[[package]]
 name = "sympy"
 version = "1.12"
 description = "Computer algebra system (CAS) in Python"
@@ -2122,4 +2141,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "14eb987e72ba90fc268bdc71bc28f309bad96f1710bb75a2ccce0d85138f2019"
+content-hash = "c1bcd93b3c414066a17096d6b0f67428ee4a3ad8fd4b1d3a756412865f06e1b7"

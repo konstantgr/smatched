@@ -26,6 +26,7 @@ torch = [
 ]
 setuptools = "^68.2.0"
 matplotlib = "^3.7.2"
+streamlit-image-comparison = "^0.0.4"
 
 [tool.poetry.group.web.dependencies]
 streamlit = "^1.26.0"
