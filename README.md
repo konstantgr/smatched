@@ -3,6 +3,9 @@
 This project is a web application that allows you to transfer make-up from one photo to another using the Stable
 Diffusion. It is built using Streamlit, a Python library for creating web applications with minimal effort.
 
+
+<div align="center"><img src="https://s11.gifyu.com/images/S4SS6.gif" width="500" /></div>
+
 ## Getting Started
 
 To run this application on your local machine, follow these steps:
@@ -37,6 +40,6 @@ You can now use the web application to transfer makeup from one photo to another
 1. Upload the source image containing the makeup you want to transfer.
 2. Upload the target image where you want to apply the makeup.
 3. Adjust any relevant parameters or settings (if available).
-4. Click the "Transfer Makeup" button.
+4. Click the "Generate makeup" button.
 5. The result, with makeup transferred to the target image, will be displayed on the screen.
 6. You can download the resulting image for your use.
