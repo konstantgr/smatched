@@ -5,15 +5,62 @@ kandinsky:
   hyperparameters:
     height: 512
     width: 512
-    guidance_scale: 7.5 # >1, default=7.5
+    guidance_scale: 7.5
     negative_prompt: ""
-    strength: 0.05 # [0,1], default=50
-
+    strength: 0.05
 sd15:
   model: runwayml/stable-diffusion-v1-5
   base_prompt: "woman makeup"
   dimensions: [ 512, 512 ]
   hyperparameters:
-    guidance_scale: 7.5 # >1, default=7.5
+    guidance_scale: 7.5
+    negative_prompt: ""
+    strength: 0.2
+pix2pix:
+  model: timbrooks/instruct-pix2pix
+  base_prompt: "woman makeup"
+  dimensions: [ 512, 512 ]
+  hyperparameters:
+    guidance_scale: 8
+    negative_prompt: ""
+    strength: 0.1
+kandinsky21:
+  model: radames/kandinsky-2-1
+  base_prompt: "woman makeup"
+  dimensions: [ 512, 512 ]
+  hyperparameters:
+    guidance_scale: 7.5
     negative_prompt: "disformed, ugly"
-    strength: 0.2 # [0,1]
+    strength: 0.05
+sd21:
+  model: stabilityai/stable-diffusion-2-1
+  base_prompt: "woman makeup"
+  dimensions: [ 512, 512 ]
+  hyperparameters:
+    guidance_scale: 7.5
+    negative_prompt: ""
+    strength: 0.2
+oj:
+  model: prompthero/openjourney
+  base_prompt: "woman makeup"
+  dimensions: [ 512, 512 ]
+  hyperparameters:
+    guidance_scale: 7.5
+    negative_prompt: ""
+    strength: 0.2
+anything:
+  model: Linaqruf/anything-v3.0
+  base_prompt: "woman makeup"
+  dimensions: [ 512, 512 ]
+  hyperparameters:
+    guidance_scale: 7.5
+    negative_prompt: ""
+    strength: 0.2
+sdxl:
+  model: stabilityai/stable-diffusion-xl
+  base_prompt: "woman makeup"
+  dimensions: [ 512, 512 ]
+  hyperparameters:
+    guidance_scale: 7.5
+    negative_prompt: ""
+    strength: 0.2
